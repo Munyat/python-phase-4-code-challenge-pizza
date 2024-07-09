@@ -26,31 +26,21 @@ def index():
 
 class Restaurants(Resource):
     def get(self):
-        restaurants = [restaurant.to_dict() for restaurant in Restaurant.query.all()]
-        return make_response(jsonify(restaurants), 200)
+        restaurants = Restaurant.query.all()
+        serialized_restaurants = [
+            {
+                "id": restaurant.id,
+                "name": restaurant.name,
+                "address": restaurant.address
+            }
+            for restaurant in restaurants
+        ]
+        return make_response(jsonify(serialized_restaurants), 200)
 
 class RestaurantById(Resource):
     def get(self, id):
         restaurant = Restaurant.query.filter_by(id=id).first()
         if restaurant:
-            # restaurant_data = {
-            # "id": restaurant.id,
-            # "name": restaurant.name,
-            # "address": restaurant.address,
-            # "restaurant_pizzas": [
-            #         {
-            #             "id": rp.id,
-            #             "pizza": {
-            #                 "id": rp.pizza.id,
-            #                 "name": rp.pizza.name,
-            #                 "ingredients": rp.pizza.ingredients
-            #             },
-            #             "pizza_id": rp.pizza_id,
-            #             "price": rp.price,
-            #             "restaurant_id": rp.restaurant_id
-            #         } for rp in restaurant.restaurant_pizzas
-            #     ]
-            # }
             return make_response(jsonify(restaurant.to_dict()), 200)
         else:
             return make_response(jsonify({"error": "Restaurant not found"}), 404)

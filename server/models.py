@@ -27,7 +27,7 @@ class Restaurant(db.Model, SerializerMixin):
                                 creator=lambda pizza_obj: RestaurantPizza(pizza=pizza_obj) )
 
     # add serialization rules
-    serialize_rules = ('-restaurant_pizzas',)
+    serialize_rules = ('-restaurant_pizzas.restaurant',)
 
     def __repr__(self):
         return f"<Restaurant {self.name}>"
